@@ -1,9 +1,6 @@
 noflo = require 'noflo'
-unless noflo.isBrowser()
-  chai = require 'chai' unless chai
-  Passport = require '../components/Passport.coffee'
-else
-  Passport = require 'passport/components/Passport.js'
+chai = require 'chai' unless chai
+Passport = require '../components/Passport.coffee'
 
 describe 'Passport component', ->
   globals = {}
@@ -12,8 +9,9 @@ describe 'Passport component', ->
     globals.c = Passport.getComponent()
     globals.in = noflo.internalSocket.createSocket()
     globals.session = noflo.internalSocket.createSocket()
+    globals.out = noflo.internalSocket.createSocket()
     globals.c.inPorts.in.attach globals.in
-    globals.c.inPorts.in.attach globals.session
+    globals.c.inPorts.session.attach globals.session
     globals.c.outPorts.out.attach globals.out
 
   describe 'when instantiated', ->

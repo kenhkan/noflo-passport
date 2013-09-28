@@ -1,9 +1,6 @@
 noflo = require 'noflo'
-unless noflo.isBrowser()
-  chai = require 'chai' unless chai
-  OAuth2Handler = require '../components/OAuth2Handler.coffee'
-else
-  OAuth2Handler = require 'passport/components/OAuth2Handler.js'
+chai = require 'chai' unless chai
+OAuth2Handler = require '../components/OAuth2Handler.coffee'
 
 describe 'OAuth2Handler component', ->
   globals = {}
@@ -14,10 +11,11 @@ describe 'OAuth2Handler component', ->
     globals.provider = noflo.internalSocket.createSocket()
     globals.success = noflo.internalSocket.createSocket()
     globals.failure = noflo.internalSocket.createSocket()
+    globals.out = noflo.internalSocket.createSocket()
     globals.c.inPorts.in.attach globals.in
-    globals.c.inPorts.in.attach globals.provider
-    globals.c.inPorts.in.attach globals.success
-    globals.c.inPorts.in.attach globals.failure
+    globals.c.inPorts.provider.attach globals.provider
+    globals.c.inPorts.success.attach globals.success
+    globals.c.inPorts.failure.attach globals.failure
     globals.c.outPorts.out.attach globals.out
 
   describe 'when intantiated', ->

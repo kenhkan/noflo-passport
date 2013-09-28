@@ -34,7 +34,10 @@ class OAuth2Handler extends noflo.Component
         callbackURL: @callbackUrl
 
       # Assign the strategy
-      passport.use @name, strategy, (accessToken, refreshToken, profile, done) =>
+      passport.use @name, strategy, (accessToken,
+                                     refreshToken,
+                                     profile,
+                                     done) =>
         # Forward object out
         @outPorts.out.send
           incoming: @incoming

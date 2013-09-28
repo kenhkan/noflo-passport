@@ -1,9 +1,6 @@
 noflo = require 'noflo'
-unless noflo.isBrowser()
-  chai = require 'chai' unless chai
-  OAuth2 = require '../components/OAuth2.coffee'
-else
-  OAuth2 = require 'passport/components/OAuth2.js'
+chai = require 'chai' unless chai
+OAuth2 = require '../components/OAuth2.coffee'
 
 describe 'OAuth2 component', ->
   globals = {}
@@ -20,13 +17,13 @@ describe 'OAuth2 component', ->
     globals.secret = noflo.internalSocket.createSocket()
     globals.out = noflo.internalSocket.createSocket()
     globals.c.inPorts.in.attach globals.in
-    globals.c.inPorts.in.attach globals.user
-    globals.c.inPorts.in.attach globals.name
-    globals.c.inPorts.in.attach globals.access
-    globals.c.inPorts.in.attach globals.auth
-    globals.c.inPorts.in.attach globals.callback
-    globals.c.inPorts.in.attach globals.key
-    globals.c.inPorts.in.attach globals.secret
+    globals.c.inPorts.user.attach globals.user
+    globals.c.inPorts.name.attach globals.name
+    globals.c.inPorts.access.attach globals.access
+    globals.c.inPorts.auth.attach globals.auth
+    globals.c.inPorts.callback.attach globals.callback
+    globals.c.inPorts.key.attach globals.key
+    globals.c.inPorts.secret.attach globals.secret
     globals.c.outPorts.out.attach globals.out
 
   describe 'when instantiated', ->
