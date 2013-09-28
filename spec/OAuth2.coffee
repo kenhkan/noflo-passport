@@ -1,23 +1,25 @@
 noflo = require 'noflo'
 unless noflo.isBrowser()
   chai = require 'chai' unless chai
-  DoSomething = require '../components/DoSomething.coffee'
+  OAuth2 = require '../components/OAuth2.coffee'
 else
-  DoSomething = require '_passport/components/DoSomething.js'
+  OAuth2 = require 'passport/components/OAuth2.js'
 
-describe 'DoSomething component', ->
-  c = null
-  ins = null
-  out = null
+describe 'OAuth2 component', ->
+  globals =
+    c: null
+    ins: null
+    out: null
+
   beforeEach ->
-    c = DoSomething.getComponent()
-    ins = noflo.internalSocket.createSocket()
-    out = noflo.internalSocket.createSocket()
-    c.inPorts.in.attach ins
-    c.outPorts.out.attach out
+    globals.c = OAuth2.getComponent()
+    globals.ins = noflo.internalSocket.createSocket()
+    globals.out = noflo.internalSocket.createSocket()
+    globals.c.inPorts.in.attach globals.ins
+    globals.c.outPorts.out.attach globals.out
 
   describe 'when instantiated', ->
     it 'should have an input port', ->
-      chai.expect(c.inPorts.in).to.be.an 'object'
+      chai.expect(globals.c.inPorts.in).to.be.an 'object'
     it 'should have an output port', ->
-      chai.expect(c.outPorts.out).to.be.an 'object'
+      chai.expect(globals.c.outPorts.out).to.be.an 'object'

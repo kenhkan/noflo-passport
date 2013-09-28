@@ -1,10 +1,12 @@
 noflo = require 'noflo'
+passport = require 'passport'
+passportOAuth = require 'passport-oauth'
 
-class DoSomething extends noflo.Component
+class OAuth2 extends noflo.Component
   constructor: ->
     @inPorts =
       in: new noflo.Port
     @outPorts =
       out: new noflo.Port
 
-exports.getComponent = -> new DoSomething
+exports.getComponent = -> new OAuth2
