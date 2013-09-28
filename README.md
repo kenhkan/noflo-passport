@@ -19,16 +19,14 @@ request object:
 
 * [passport/Passport](#Passport)
 * [passport/OAuth2](#OAuth2)
-* [passport/OAuth2Init](#OAuth2Init)
-* [passport/OAuth2Callback](#OAuth2Callback)
+* [passport/OAuth2Handler](#OAuth2Handler)
 
 Listed in-ports in bold are required and out-ports in bold always produce IPs.
 
 
 ### Passport
 
-This must be placed after your
-[noflo-webserver](https://github.com/noflo/noflo-webserver/) instance to use
+This component is placed after your strategy handler (say OAuth2Handler) to run
 Passport.js.
 
 #### In-Ports
@@ -47,13 +45,35 @@ Implements OAuth 2.0 using `passport-oauth` strategy as outlined
 [here](http://passportjs.org/guide/oauth/). This component configures a
 provider for use.
 
+The setup may be a little confusing as `passport/OAuth2` registers the strategy
+while `passport/OAuth2Handler` handles the actual HTTP requests during a
+  transaction.
+
+Most of the ports accept configuration packets, most likely only once in the
+lifetime of the program. However, they may also be sent new configuration
+packets dynamically for situations like when the provider's authentication URLs
+are dependent upon the user's ID in their identity database.
+
+The 'IN' in-port, on the other, lives "separately" from the rest of the ports.
+It takes whatever you feed it and spits that out along with the tokens and
+profile upon every authentication. This is to provide a mechanism to identify a
+transaction when the provider does not return anything in the profile along
+with the token. The data it receives persists until new data is fed to it.
+
+Because Passport.js requires a user object to be returned, there is a 'USER'
+in-port accepting the user object, the one sent by 'OUT' with a 'user'
+attribute. It then closes the connection by continuing with the HTTP request
+flow.
+
 #### In-Ports
 
-* *IN*: IPs passed here will be forwarded as-is to OUT with the resulting tokens.
+* *IN*: IPs passed here will be forwarded as an array of IPs to OUT with the
+  resulting tokens.
 * *USER*: Passport.js expects a user object to be passed to it when the token is
   consumed. For each OUT it must eventually return to USER to complete the
   transaction!
-* *NAME*: The name to assign an OAuth2 strategy with Passport.js
+* *NAME*: The name to assign an OAuth2 strategy with Passport.js. Pass this in
+  *last* as this would perform the assignment.
 * REQUEST: The URL to request a new token. See "requestTokenURL" in Passport.js
   documentation
 * *ACCESS*: The URL to request the access token. See "accessTokenURL" in
@@ -67,31 +87,13 @@ provider for use.
 
 #### Out-Ports
 
-* *OUT*: The IPs passed from IN
-* *TOKEN*: The access token
-* SECRET: The corresponding secret
-* PROFILE: User profile if any
+* *OUT*: An object containing the IPs sent to 'IN', the access token, the
+  refresh token, the profile, and the verify callback.
 
-### OAuth2Init
+### OAuth2Handler
 
-OAuth2 takes two steps. The first is when user initiates authentication. This
-component expects a request object, middleware-style.
-
-#### In-Ports
-
-* *IN*: The equivalent of invoking `passport.authenticate()` on the incoming
-  request object
-* *PROVIDER*: The name of the provider to authenticate against
-
-#### Out-Ports
-
-* *OUT*: The request object
-
-### OAuth2Callback
-
-This receives callback requests (the second step) from the identity provider to
-complete the auth transaction. This component expects a request object,
-middleware-style.
+This component handles incoming request in the OAuth handshake. it expects a
+request object, middleware-style.
 
 #### In-Ports
 

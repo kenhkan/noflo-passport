@@ -19,9 +19,6 @@ describe 'OAuth2 component', ->
     globals.key = noflo.internalSocket.createSocket()
     globals.secret = noflo.internalSocket.createSocket()
     globals.out = noflo.internalSocket.createSocket()
-    globals.token = noflo.internalSocket.createSocket()
-    globals.secret = noflo.internalSocket.createSocket()
-    globals.profile = noflo.internalSocket.createSocket()
     globals.c.inPorts.in.attach globals.in
     globals.c.inPorts.in.attach globals.user
     globals.c.inPorts.in.attach globals.name
@@ -31,9 +28,6 @@ describe 'OAuth2 component', ->
     globals.c.inPorts.in.attach globals.key
     globals.c.inPorts.in.attach globals.secret
     globals.c.outPorts.out.attach globals.out
-    globals.c.outPorts.out.attach globals.token
-    globals.c.outPorts.out.attach globals.secret
-    globals.c.outPorts.out.attach globals.profile
 
   describe 'when instantiated', ->
     it 'should have an input port', ->
@@ -47,6 +41,3 @@ describe 'OAuth2 component', ->
       chai.expect(globals.c.inPorts.secret).to.be.an 'object'
     it 'should have an output port', ->
       chai.expect(globals.c.outPorts.out).to.be.an 'object'
-      chai.expect(globals.c.outPorts.token).to.be.an 'object'
-      chai.expect(globals.c.outPorts.secret).to.be.an 'object'
-      chai.expect(globals.c.outPorts.profile).to.be.an 'object'
