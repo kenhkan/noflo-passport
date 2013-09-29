@@ -69,9 +69,10 @@ class OAuthTwo extends noflo.Component
     # Continue with the request transaction
     @inPorts.user.on 'data', (data) =>
       console.log '*** RETURNING'
-      data.callback null, false
-      #id: '5243adbf5d6be77b3101bac5'
-      #name: 'Pixbi store'
+      data.callback null,
+        id: '5243adbf5d6be77b3101bac5'
+        _id: '5243adbf5d6be77b3101bac5'
+        name: 'Pixbi store'
       # TODO: restore
       #data.callback data.error, data.user
       console.log 'RETURN DONE'

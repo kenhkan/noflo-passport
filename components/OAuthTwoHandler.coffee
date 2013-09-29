@@ -49,6 +49,7 @@ class OAuthTwoHandler extends noflo.Component
         #  failureRedirect: @failure
         # TODO: remove
         options = {}
+        options.session = false
         options.scope = @scopes if @scopes?
         options.successRedirect = @success if @success?
         options.failureRedirect = @failure if @failure?
