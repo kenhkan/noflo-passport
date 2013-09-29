@@ -3,6 +3,8 @@ passport = require 'passport'
 
 class OAuthTwoHandler extends noflo.Component
   constructor: ->
+    @session = true
+
     @inPorts =
       in: new noflo.Port
       provider: new noflo.Port
@@ -32,8 +34,6 @@ class OAuthTwoHandler extends noflo.Component
       throw new Error 'Missing provider' unless @provider?
 
       { req, res } = @request
-      #console.log '*** AAA'
-      #console.log req
 
       # Patch to placate Passport.js
       @patch req, res
@@ -43,19 +43,12 @@ class OAuthTwoHandler extends noflo.Component
         throw e if e?
 
         # Authenticate
-        #options =
-        #  scope: @scopes
-        #  successRedirect: @success
-        #  failureRedirect: @failure
-        # TODO: remove
-        options = {}
-        options.session = false
-        options.scope = @scopes if @scopes?
-        options.successRedirect = @success if @success?
-        options.failureRedirect = @failure if @failure?
+        options =
+          session: @session
+          scope: @scopes
+          successRedirect: @success
+          failureRedirect: @failure
 
-        console.log '*** WTF'
-        console.log req.query
         passport.authenticate(@provider, options) req, res, (e) =>
           throw e if e?
 

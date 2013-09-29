@@ -32,7 +32,6 @@
   "keywords": [],
   "noflo": {
     "components": {
-      "Passport": "./components/Passport.coffee",
       "OAuthTwo": "./components/OAuthTwo.coffee",
       "OAuthTwoHandler": "./components/OAuthTwoHandler.coffee"
     }

@@ -1,8 +1,6 @@
 noflo = require 'noflo'
 passport = require 'passport'
-#passportOAuth = require 'passport-oauth'
-passportOAuth =
-  OAuth2Strategy: require 'passport-oauth2'
+{ OAuth2Strategy } = require 'passport-oauth'
 
 class OAuthTwo extends noflo.Component
   constructor: ->
@@ -29,23 +27,14 @@ class OAuthTwo extends noflo.Component
     @inPorts.name.on 'data', (@name) =>
     @inPorts.name.on 'disconnect', =>
       # Instantiate the strategy
-      strategy = new passportOAuth.OAuth2Strategy
-        authorizationURL: 'https://pixbi.myshopify.com/admin/oauth/authorize'
-        tokenURL: 'https://pixbi.myshopify.com/admin/oauth/access_token'
+      strategy = new OAuth2Strategy
+        authorizationURL: @authUrl
+        tokenURL: @accessUrl
         clientID: @key
         clientSecret: @secret
-        callbackURL: 'http://localhost:5000/shopify/callback'
-      #strategy = new passportOAuth.OAuth2Strategy
-      #  authorizationURL: @authUrl
-      #  tokenURL: @accessUrl
-      #  clientID: @key
-      #  clientSecret: @secret
-      #  callbackURL: @callbackUrl
+        callbackURL: @callbackUrl
       # Verify callback
       , (accessToken, refreshToken, profile, done) =>
-        console.log '*** VERIFYING'
-        console.log refreshToken
-        console.log profile
         @outPorts.out.send
           incoming: @incoming
           accessToken: accessToken
@@ -68,13 +57,6 @@ class OAuthTwo extends noflo.Component
 
     # Continue with the request transaction
     @inPorts.user.on 'data', (data) =>
-      console.log '*** RETURNING'
-      data.callback null,
-        id: '5243adbf5d6be77b3101bac5'
-        _id: '5243adbf5d6be77b3101bac5'
-        name: 'Pixbi store'
-      # TODO: restore
-      #data.callback data.error, data.user
-      console.log 'RETURN DONE'
+      data.callback data.error, data.user
 
 exports.getComponent = -> new OAuthTwo
