@@ -6,14 +6,14 @@ class OAuthTwoHandler extends noflo.Component
     @session = true
 
     @inPorts =
-      in: new noflo.Port
-      provider: new noflo.Port
-      session: new noflo.Port
-      success: new noflo.Port
-      failure: new noflo.Port
-      scope: new noflo.Port
+      in: new noflo.Port 'object'
+      provider: new noflo.Port 'string'
+      session: new noflo.Port 'string'
+      success: new noflo.Port 'string'
+      failure: new noflo.Port 'string'
+      scope: new noflo.Port 'string'
     @outPorts =
-      out: new noflo.Port
+      out: new noflo.Port 'object'
 
     @inPorts.provider.on 'data', (@provider) =>
     @inPorts.success.on 'data', (@success) =>

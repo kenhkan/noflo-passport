@@ -5,16 +5,16 @@ passport = require 'passport'
 class OAuthTwoStrategy extends noflo.Component
   constructor: ->
     @inPorts =
-      in: new noflo.Port
-      user: new noflo.Port
-      name: new noflo.Port
-      access: new noflo.Port
-      auth: new noflo.Port
-      callback: new noflo.Port
-      key: new noflo.Port
-      secret: new noflo.Port
+      in: new noflo.Port 'object'
+      user: new noflo.Port 'object'
+      name: new noflo.Port 'string'
+      access: new noflo.Port 'string'
+      auth: new noflo.Port 'string'
+      callback: new noflo.Port 'string'
+      key: new noflo.Port 'string'
+      secret: new noflo.Port 'string'
     @outPorts =
-      out: new noflo.Port
+      out: new noflo.Port 'object'
 
     @inPorts.access.on 'data', (@accessUrl) =>
     @inPorts.auth.on 'data', (@authUrl) =>
