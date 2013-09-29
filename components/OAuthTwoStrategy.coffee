@@ -2,7 +2,7 @@ noflo = require 'noflo'
 passport = require 'passport'
 { OAuth2Strategy } = require 'passport-oauth'
 
-class OAuthTwo extends noflo.Component
+class OAuthTwoStrategy extends noflo.Component
   constructor: ->
     @inPorts =
       in: new noflo.Port
@@ -58,4 +58,4 @@ class OAuthTwo extends noflo.Component
     @inPorts.user.on 'data', (data) =>
       data.callback data.error, data.user
 
-exports.getComponent = -> new OAuthTwo
+exports.getComponent = -> new OAuthTwoStrategy

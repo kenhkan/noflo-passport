@@ -32,7 +32,7 @@
   "keywords": [],
   "noflo": {
     "components": {
-      "OAuthTwo": "./components/OAuthTwo.coffee",
+      "OAuthTwoStrategy": "./components/OAuthTwoStrategy.coffee",
       "OAuthTwoHandler": "./components/OAuthTwoHandler.coffee"
     }
   }
