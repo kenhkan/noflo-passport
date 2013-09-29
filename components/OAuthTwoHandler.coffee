@@ -43,18 +43,26 @@ class OAuthTwoHandler extends noflo.Component
         throw e if e?
 
         # Authenticate
-        options =
-          session: @session
-          scope: @scopes
-          successRedirect: @success
-          failureRedirect: @failure
+        authenticate = =>
+          options =
+            session: @session
+            scope: @scopes
+            successRedirect: @success
+            failureRedirect: @failure
 
-        passport.authenticate(@provider, options) req, res, (e) =>
-          throw e if e?
+          passport.authenticate(@provider, options) req, res, (e) =>
+            throw e if e?
+            @outPorts.out.send @request
+            @outPorts.out.disconnect()
 
-          # TODO: implement session
-          @outPorts.out.send @request
-          @outPorts.out.disconnect()
+        # Use Passport.js session middleware if desired
+        if @session
+          passport.session() req, res, (e) =>
+            throw e if e?
+            authenticate()
+        # Simply authenticate otherwise
+        else
+          authenticate()
 
   # Deal with bugs arising from inconsiderate libraries
   patch: (req, res) ->
