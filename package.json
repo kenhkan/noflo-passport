@@ -33,8 +33,8 @@
   "noflo": {
     "components": {
       "Passport": "./components/Passport.coffee",
-      "OAuth2": "./components/OAuth2.coffee",
-      "OAuth2Handler": "./components/OAuth2Handler.coffee"
+      "OAuthTwo": "./components/OAuthTwo.coffee",
+      "OAuthTwoHandler": "./components/OAuthTwoHandler.coffee"
     }
   }
 }

@@ -1,8 +1,10 @@
 noflo = require 'noflo'
 passport = require 'passport'
-passportOAuth = require 'passport-oauth'
+#passportOAuth = require 'passport-oauth'
+passportOAuth =
+  OAuth2Strategy: require 'passport-oauth2'
 
-class OAuth2Handler extends noflo.Component
+class OAuthTwo extends noflo.Component
   constructor: ->
     @inPorts =
       in: new noflo.Port
@@ -11,6 +13,7 @@ class OAuth2Handler extends noflo.Component
       access: new noflo.Port
       auth: new noflo.Port
       callback: new noflo.Port
+      request: new noflo.Port # TODO: implement this
       key: new noflo.Port
       secret: new noflo.Port
     @outPorts =
@@ -27,18 +30,22 @@ class OAuth2Handler extends noflo.Component
     @inPorts.name.on 'disconnect', =>
       # Instantiate the strategy
       strategy = new passportOAuth.OAuth2Strategy
-        authorizationURL: @authUrl
-        tokenURL: @accessUrl
+        authorizationURL: 'https://pixbi.myshopify.com/admin/oauth/authorize'
+        tokenURL: 'https://pixbi.myshopify.com/admin/oauth/access_token'
         clientID: @key
         clientSecret: @secret
-        callbackURL: @callbackUrl
-
-      # Assign the strategy
-      passport.use @name, strategy, (accessToken,
-                                     refreshToken,
-                                     profile,
-                                     done) =>
-        # Forward object out
+        callbackURL: 'http://localhost:5000/shopify/callback'
+      #strategy = new passportOAuth.OAuth2Strategy
+      #  authorizationURL: @authUrl
+      #  tokenURL: @accessUrl
+      #  clientID: @key
+      #  clientSecret: @secret
+      #  callbackURL: @callbackUrl
+      # Verify callback
+      , (accessToken, refreshToken, profile, done) =>
+        console.log '*** VERIFYING'
+        console.log refreshToken
+        console.log profile
         @outPorts.out.send
           incoming: @incoming
           accessToken: accessToken
@@ -50,6 +57,9 @@ class OAuth2Handler extends noflo.Component
         # Clean up
         @accessUrl = @authUrl = @callbackUrl = @key = @secret = @name = null
 
+      # Assign the strategy
+      passport.use @name, strategy
+
     # Save all incoming
     @inPorts.in.on 'connect', =>
       @incoming = []
@@ -58,6 +68,12 @@ class OAuth2Handler extends noflo.Component
 
     # Continue with the request transaction
     @inPorts.user.on 'data', (data) =>
-      data.callback data.error, data.user
+      console.log '*** RETURNING'
+      data.callback null, false
+      #id: '5243adbf5d6be77b3101bac5'
+      #name: 'Pixbi store'
+      # TODO: restore
+      #data.callback data.error, data.user
+      console.log 'RETURN DONE'
 
-exports.getComponent = -> new OAuth2Handler
+exports.getComponent = -> new OAuthTwo

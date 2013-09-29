@@ -1,12 +1,12 @@
 noflo = require 'noflo'
 chai = require 'chai' unless chai
-OAuth2 = require '../components/OAuth2.coffee'
+OAuthTwo = require '../components/OAuthTwo.coffee'
 
-describe 'OAuth2 component', ->
+describe 'OAuthTwo component', ->
   globals = {}
 
   beforeEach ->
-    globals.c = OAuth2.getComponent()
+    globals.c = OAuthTwo.getComponent()
     globals.in = noflo.internalSocket.createSocket()
     globals.user = noflo.internalSocket.createSocket()
     globals.name = noflo.internalSocket.createSocket()

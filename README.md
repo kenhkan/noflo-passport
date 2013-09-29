@@ -18,35 +18,36 @@ request object:
 ## Usage
 
 * [passport/Passport](#Passport)
-* [passport/OAuth2](#OAuth2)
-* [passport/OAuth2Handler](#OAuth2Handler)
+* [passport/OAuthTwo](#OAuthTwo)
+* [passport/OAuthTwoHandler](#OAuthTwoHandler)
 
 Listed in-ports in bold are required and out-ports in bold always produce IPs.
 
 
 ### Passport
 
-This component is placed after your strategy handler (say OAuth2Handler) to run
+This component is placed after your strategy handler (say OAuthTwoHandler) to run
 Passport.js.
 
 #### In-Ports
 
 * *IN*: The incoming request, middleware-style
-* SESSION: `true` if session is enabled. Default to `false`
+* SESSION: `true` if session is enabled. Default to `false`. NOTE: This is a
+  singleton value. New value applies to all instances of `passport/Passport`
 
 #### Out-Ports
 
 * *OUT*: The outgoing request, middleware-style
 
 
-### OAuth2
+### OAuthTwo
 
 Implements OAuth 2.0 using `passport-oauth` strategy as outlined
 [here](http://passportjs.org/guide/oauth/). This component configures a
 provider for use.
 
-The setup may be a little confusing as `passport/OAuth2` registers the strategy
-while `passport/OAuth2Handler` handles the actual HTTP requests during a
+The setup may be a little confusing as `passport/OAuthTwo` registers the strategy
+while `passport/OAuthTwoHandler` handles the actual HTTP requests during a
   transaction.
 
 Most of the ports accept configuration packets, most likely only once in the
@@ -80,8 +81,8 @@ flow.
   Passport.js documentation
 * *AUTH*: The URL to authenticate the user. See "userAuthorizationURL" in
   Passport.js documentation
-* *CALLBACK*: The URL for the provider to call back. This should ultimately lead
-  to an `passport/OAuth2Callback` process
+* CALLBACK: The URL for the provider to call back. This should ultimately lead
+  to an `passport/OAuthTwoHandler` process
 * *KEY*: The consumer key
 * *SECRET*: The consumer secret
 
@@ -90,7 +91,7 @@ flow.
 * *OUT*: An object containing the IPs sent to 'IN', the access token, the
   refresh token, the profile, and the verify callback.
 
-### OAuth2Handler
+### OAuthTwoHandler
 
 This component handles incoming request in the OAuth handshake. it expects a
 request object, middleware-style.
