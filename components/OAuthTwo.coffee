@@ -11,7 +11,6 @@ class OAuthTwo extends noflo.Component
       access: new noflo.Port
       auth: new noflo.Port
       callback: new noflo.Port
-      request: new noflo.Port # TODO: implement this
       key: new noflo.Port
       secret: new noflo.Port
     @outPorts =
