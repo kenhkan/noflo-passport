@@ -6,7 +6,7 @@ class OAuthTwoStrategy extends noflo.Component
   constructor: ->
     @inPorts =
       in: new noflo.Port 'object'
-      user: new noflo.Port 'object'
+      return: new noflo.Port 'object'
       name: new noflo.Port 'string'
       access: new noflo.Port 'string'
       auth: new noflo.Port 'string'
@@ -55,7 +55,7 @@ class OAuthTwoStrategy extends noflo.Component
       @incoming.push data
 
     # Continue with the request transaction
-    @inPorts.user.on 'data', (data) =>
+    @inPorts.return.on 'data', (data) =>
       data.callback data.error, data.user
 
 exports.getComponent = -> new OAuthTwoStrategy
