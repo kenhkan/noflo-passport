@@ -25,6 +25,8 @@ class OAuthTwoStrategy extends noflo.Component
     # Provider name triggers strategy assignment
     @inPorts.name.on 'data', (@name) =>
     @inPorts.name.on 'disconnect', =>
+      incoming = @incoming
+
       # Instantiate the strategy
       strategy = new OAuth2Strategy
         authorizationURL: @authUrl
@@ -35,7 +37,7 @@ class OAuthTwoStrategy extends noflo.Component
       # Verify callback
       , (accessToken, refreshToken, profile, done) =>
         @outPorts.out.send
-          incoming: @incoming
+          incoming: incoming
           accessToken: accessToken
           refreshToken: refreshToken
           profile: profile
