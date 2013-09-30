@@ -30,6 +30,9 @@
     "grunt-contrib-watch": "~0.3.1"
   },
   "keywords": [],
+  "scripts": {
+    "test": "grunt test"
+  },
   "noflo": {
     "components": {
       "OAuthTwoStrategy": "./components/OAuthTwoStrategy.coffee",
