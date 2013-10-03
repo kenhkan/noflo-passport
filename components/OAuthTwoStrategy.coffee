@@ -5,9 +5,9 @@ passport = require 'passport'
 class OAuthTwoStrategy extends noflo.Component
   constructor: ->
     @inPorts =
-      in: new noflo.Port 'object'
+      in: new noflo.Port 'string'
       return: new noflo.Port 'object'
-      name: new noflo.Port 'string'
+      payload: new noflo.Port 'object'
       access: new noflo.Port 'string'
       auth: new noflo.Port 'string'
       callback: new noflo.Port 'string'
@@ -23,9 +23,9 @@ class OAuthTwoStrategy extends noflo.Component
     @inPorts.secret.on 'data', (@secret) =>
 
     # Provider name triggers strategy assignment
-    @inPorts.name.on 'data', (@name) =>
-    @inPorts.name.on 'disconnect', =>
-      incoming = @incoming
+    @inPorts.in.on 'data', (@name) =>
+    @inPorts.in.on 'disconnect', =>
+      payload = @payload
 
       # Instantiate the strategy
       strategy = new OAuth2Strategy
@@ -37,24 +37,21 @@ class OAuthTwoStrategy extends noflo.Component
       # Verify callback
       , (accessToken, refreshToken, profile, done) =>
         @outPorts.out.send
-          incoming: incoming
+          payload: payload
           accessToken: accessToken
           refreshToken: refreshToken
           profile: profile
           callback: done
         @outPorts.out.disconnect()
 
-        # Clean up
-        @accessUrl = @authUrl = @callbackUrl = @key = @secret = @name = null
-
       # Assign the strategy
       passport.use @name, strategy
 
-    # Save all incoming
-    @inPorts.in.on 'connect', =>
-      @incoming = []
-    @inPorts.in.on 'data', (data) =>
-      @incoming.push data
+    # Save all payload
+    @inPorts.payload.on 'connect', =>
+      @payload = []
+    @inPorts.payload.on 'data', (data) =>
+      @payload.push data
 
     # Continue with the request transaction
     @inPorts.return.on 'data', (data) =>

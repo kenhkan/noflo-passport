@@ -33,30 +33,40 @@ class OAuthTwoHandler extends noflo.Component
     @inPorts.in.on 'disconnect', =>
       throw new Error 'Missing provider' unless @provider?
 
+      # Save for later
       { req, res } = @request
+      provider = @provider
+      session = @session
+      scopes = @scopes
+      success = @success
+      failure = @failure
 
       # Patch to placate Passport.js
       @patch req, res
 
       # Initialize
-      passport.initialize() req, res, (e) =>
-        throw e if e?
-
+      passport.initialize() req, res, =>
         # Authenticate
         authenticate = =>
           options =
-            session: @session
-            scope: @scopes
-            successRedirect: @success
-            failureRedirect: @failure
+            session: session
+            scope: scopes
+            success: success
+            failure: failure
 
-          passport.authenticate(@provider, options) req, res, (e) =>
-            throw e if e?
-            @outPorts.out.send @request
+          # Authenticate the request
+          passport.authenticate(provider, options) req, res, (e) =>
+            # Redirect based on success or failure
+            res.redirect if e then failure else success
+
+            # Forward regardless though
+            @outPorts.out.send
+              req: req
+              res: res
             @outPorts.out.disconnect()
 
         # Use Passport.js session middleware if desired
-        if @session
+        if session
           passport.session() req, res, (e) =>
             throw e if e?
             authenticate()
