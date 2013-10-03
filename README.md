@@ -25,7 +25,7 @@ request object:
 * [passport/OAuthTwoStrategy](#OAuthTwoStrategy)
 * [passport/OAuthTwoHandler](#OAuthTwoHandler)
 
-Listed in-ports in bold are required and out-ports in bold always produce IPs.
+Listed in-ports in **bold** are required and out-ports in **bold** always produce IPs.
 
 
 ### OAuthTwoStrategy
@@ -52,25 +52,25 @@ flow.
 
 #### In-Ports
 
-* *IN*: IPs passed here will be forwarded as an array of IPs to OUT with the
-  resulting tokens.
-* *RETURN*: Passport.js expects a user object to be passed to it when the token
+* **IN**: The name to assign an OAuth2 strategy with Passport.js. Pass this in
+  *last* as this would perform the assignment.
+* **PAYLOAD**: IPs passed here will be forwarded as an array of IPs to OUT with
+  the resulting tokens.
+* **RETURN**: Passport.js expects a user object to be passed to it when the token
   is consumed. For each OUT it must eventually return to RETURN to complete the
   transaction!
-* *NAME*: The name to assign an OAuth2 strategy with Passport.js. Pass this in
-  *last* as this would perform the assignment.
-* *ACCESS*: The URL to request the access token. See "accessTokenURL" in
+* **ACCESS**: The URL to request the access token. See "accessTokenURL" in
   Passport.js documentation
-* *AUTH*: The URL to authenticate the user. See "userAuthorizationURL" in
+* **AUTH**: The URL to authenticate the user. See "userAuthorizationURL" in
   Passport.js documentation
-* *CALLBACK*: The URL for the provider to call back. This should ultimately lead
+* **CALLBACK**: The URL for the provider to call back. This should ultimately lead
   to an `passport/OAuthTwoHandler` process
-* *KEY*: The consumer key
-* *SECRET*: The consumer secret
+* **KEY**: The consumer key
+* **SECRET**: The consumer secret
 
 #### Out-Ports
 
-* *OUT*: An object containing the IPs sent to 'IN', the access token, the
+* **OUT**: An object containing the IPs sent to 'IN', the access token, the
   refresh token, the profile, and the verify callback.
 
 ### OAuthTwoHandler
@@ -83,8 +83,8 @@ request object, middleware-style. Attach this to a `webserver/Server` instance.
 
 #### In-Ports
 
-* *IN*: The request object
-* *PROVIDER*: The name of the provider to authenticate against
+* **IN**: The request object
+* **PROVIDER**: The name of the provider to authenticate against
 * SESSION: Whether to enable session. Default to true
 * SCOPE: Specify OAuth2 scopes. Each IP is one scope.
 * SUCCESS: The URL to redirect upon success
@@ -92,4 +92,4 @@ request object, middleware-style. Attach this to a `webserver/Server` instance.
 
 #### Out-Ports
 
-* *OUT*: The request object
+* **OUT**: The request object
